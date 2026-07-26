@@ -2,8 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { ArrowUpDown, ArrowUp, ArrowDown, X, RotateCcw, Filter, Calendar, Edit3, Star, CheckCircle, Activity, HeartHandshake, Smile } from "lucide-react";
+import { ArrowUpDown, ArrowUp, ArrowDown, X, RotateCcw, Filter, Calendar, Edit3, Star, CheckCircle, Activity, HeartHandshake, Smile, Layers } from "lucide-react";
 import { EJProfileModal, computeFarol, farolClasses, fmtBRL, parseEjMetrics, FAROL_ORDER, MESES_NOMES, EJData } from "@/components/EJProfileModal";
+import { computeIndex, clusterFromIndex, type ClusterMode } from "@/lib/cluster";
 
 type EJRow = EJData;
 
