@@ -220,6 +220,11 @@ function Dashboard() {
         if (!isNaN(minCsat) && (e.csat === null || e.csat === undefined || e.csat < minCsat)) return false;
       }
 
+      if (filterCluster !== "all") {
+        const activeCluster = clusterMode === "ENEJ" ? e.clusterEnej : e.clusterAnual;
+        if (String(activeCluster) !== filterCluster) return false;
+      }
+
       return true;
     });
   }, [
@@ -235,6 +240,8 @@ function Dashboard() {
     filterAlcancou,
     filterEcmMin,
     filterCsatMin,
+    filterCluster,
+    clusterMode,
   ]);
 
   const sorted = useMemo(() => {
