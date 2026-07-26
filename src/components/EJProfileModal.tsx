@@ -152,6 +152,7 @@ export function EJProfileModal({
   const [nome, setNome] = useState("");
   const [meta, setMeta] = useState<number | "">(0);
   const [faturamento, setFaturamento] = useState<number | "">(0);
+  const [fatColab, setFatColab] = useState<number | "">(0);
   const [squadId, setSquadId] = useState<string>("");
   const [guardiaoId, setGuardiaoId] = useState<string>("");
   const [alcancou, setAlcancou] = useState(false);
@@ -161,6 +162,7 @@ export function EJProfileModal({
   const [ecmVal, setEcmVal] = useState<number | "">("");
   const [csatVal, setCsatVal] = useState<number | "">("");
   const [informacoesText, setInformacoesText] = useState<string>("");
+  const [clusterMode, setClusterMode] = useState<ClusterMode>("ANUAL");
 
   const [saving, setSaving] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
