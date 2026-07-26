@@ -466,6 +466,7 @@ export function EJProfileModal({
                 <p className="text-[11px] text-muted-foreground mt-1">
                   Diferença p/ Meta Ano: {fmtBRL(Math.max(0, metaNum - fatNum))}
                 </p>
+              </div>
             </div>
 
             <div>
