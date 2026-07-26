@@ -116,6 +116,7 @@ export type EJData = {
   presente: boolean;
   meta: number;
   faturamento: number;
+  fat_colaborativo?: number | null;
   farol: string | null;
   aposta_verde: string | null;
   aposta_sde: string | null;
