@@ -58,6 +58,7 @@ export type Database = {
           atingiu_agosto: string | null
           created_at: string
           farol: string | null
+          fat_colaborativo: number
           faturamento: number
           gap: number
           guardiao_id: string | null
@@ -79,6 +80,7 @@ export type Database = {
           atingiu_agosto?: string | null
           created_at?: string
           farol?: string | null
+          fat_colaborativo?: number
           faturamento?: number
           gap?: number
           guardiao_id?: string | null
@@ -100,6 +102,7 @@ export type Database = {
           atingiu_agosto?: string | null
           created_at?: string
           farol?: string | null
+          fat_colaborativo?: number
           faturamento?: number
           gap?: number
           guardiao_id?: string | null
