@@ -125,6 +125,7 @@ export type EJData = {
   informacoes?: string | null;
   ecm?: number | null;
   csat?: number | null;
+  fat_colaborativo?: number | null;
   guardioes: { id?: string; nome: string } | null;
   squads: { id?: string; nome: string } | null;
 };
