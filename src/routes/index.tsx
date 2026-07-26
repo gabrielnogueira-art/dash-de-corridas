@@ -75,6 +75,8 @@ function Dashboard() {
 
   // Month Reference for Farol (Defaults to Current Month 1-12)
   const [currentMonth, setCurrentMonth] = useState<number>(() => new Date().getMonth() + 1);
+  const [clusterMode, setClusterMode] = useState<ClusterMode>("ANUAL");
+  const [filterCluster, setFilterCluster] = useState<string>("all");
 
   // Profile Modal State
   const [selectedEj, setSelectedEj] = useState<EJRow | null>(null);
