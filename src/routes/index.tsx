@@ -178,6 +178,7 @@ function Dashboard() {
     setFilterAlcancou(false);
     setFilterEcmMin("");
     setFilterCsatMin("");
+    setFilterCluster("all");
   };
 
   const filtered = useMemo(() => {
