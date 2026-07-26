@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { X, Save, Building2, User, Users, Target, DollarSign, Award, Star, CheckCircle, AlertTriangle, Info, Activity, HeartHandshake } from "lucide-react";
+import { X, Save, Building2, User, Users, Target, DollarSign, Award, Star, CheckCircle, AlertTriangle, Info, Activity, HeartHandshake, HandCoins, Layers } from "lucide-react";
+import { computeIndex, clusterFromIndex, type ClusterMode } from "@/lib/cluster";
 
 export const FAROL_ORDER = ["AZUL", "VERDE", "AMARELO", "VERMELHO", "ZERADA"] as const;
 export type FarolType = typeof FAROL_ORDER[number];
