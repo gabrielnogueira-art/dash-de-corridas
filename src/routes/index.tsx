@@ -289,6 +289,14 @@ function Dashboard() {
           valA = a.csat ?? -1;
           valB = b.csat ?? -1;
           break;
+        case "cluster":
+          valA = clusterMode === "ENEJ" ? a.clusterEnej : a.clusterAnual;
+          valB = clusterMode === "ENEJ" ? b.clusterEnej : b.clusterAnual;
+          break;
+        case "indice":
+          valA = clusterMode === "ENEJ" ? a.indexEnej : a.indexAnual;
+          valB = clusterMode === "ENEJ" ? b.indexEnej : b.indexAnual;
+          break;
         default:
           return 0;
       }
