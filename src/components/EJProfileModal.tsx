@@ -189,6 +189,9 @@ export function EJProfileModal({
 
   const metaNum = Number(meta) || 0;
   const fatNum = Number(faturamento) || 0;
+  const fatColabNum = Number(fatColab) || 0;
+  const ecmNumLive = ecmVal !== "" ? Number(ecmVal) : null;
+  const csatNumLive = csatVal !== "" ? Number(csatVal) : null;
 
   const liveFarol = useMemo(() => {
     return computeFarol(metaNum, fatNum, currentMonth);
@@ -199,6 +202,20 @@ export function EJProfileModal({
   const metaMesAnterior = (metaNum / 12) * mesAnterior;
 
   const atingimentoPct = metaNum > 0 ? (fatNum / metaNum) * 100 : 0;
+
+  const clusterInputs = {
+    faturamento: fatNum,
+    fatColaborativo: fatColabNum,
+    ecm: ecmNumLive,
+    csat: csatNumLive,
+    currentMonth,
+  };
+  const indexAnual = computeIndex("ANUAL", clusterInputs);
+  const indexEnej = computeIndex("ENEJ", clusterInputs);
+  const clusterAnual = clusterFromIndex(indexAnual);
+  const clusterEnej = clusterFromIndex(indexEnej);
+  const activeIndex = clusterMode === "ENEJ" ? indexEnej : indexAnual;
+  const activeCluster = clusterMode === "ENEJ" ? clusterEnej : clusterAnual;
 
   if (!isOpen || !ej) return null;
 
