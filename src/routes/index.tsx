@@ -751,6 +751,22 @@ function Dashboard() {
                     />
                   </th>
 
+                  {/* Cluster filter */}
+                  <th className="px-2 py-2 text-center font-normal normal-case">
+                    <select
+                      value={filterCluster}
+                      onChange={(e) => setFilterCluster(e.target.value)}
+                      className="w-full bg-background text-foreground text-xs rounded border border-border/60 px-2 py-1 outline-none focus:border-primary text-center"
+                    >
+                      <option value="all">Todos</option>
+                      {[1, 2, 3, 4, 5].map((c) => (
+                        <option key={c} value={String(c)}>
+                          C{c}
+                        </option>
+                      ))}
+                    </select>
+                  </th>
+
                   {/* Aposta filter */}
                   <th className="px-2 py-2 text-center font-normal normal-case">
                     <select
