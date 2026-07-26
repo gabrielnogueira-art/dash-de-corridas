@@ -1,0 +1,1 @@
+ALTER TABLE public.ejs ADD COLUMN IF NOT EXISTS fat_colaborativo numeric NOT NULL DEFAULT 0;

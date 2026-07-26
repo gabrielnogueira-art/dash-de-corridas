@@ -2,8 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { ArrowUpDown, ArrowUp, ArrowDown, X, RotateCcw, Filter, Calendar, Edit3, Star, CheckCircle, Activity, HeartHandshake, Smile } from "lucide-react";
+import { ArrowUpDown, ArrowUp, ArrowDown, X, RotateCcw, Filter, Calendar, Edit3, Star, CheckCircle, Activity, HeartHandshake, Smile, Layers } from "lucide-react";
 import { EJProfileModal, computeFarol, farolClasses, fmtBRL, parseEjMetrics, FAROL_ORDER, MESES_NOMES, EJData } from "@/components/EJProfileModal";
+import { computeIndex, clusterFromIndex, type ClusterMode } from "@/lib/cluster";
 
 type EJRow = EJData;
 
@@ -13,7 +14,7 @@ const ejsQuery = queryOptions({
     const { data, error } = await supabase
       .from("ejs")
       .select(
-        "id, nome, presente, meta, faturamento, farol, aposta_verde, aposta_sde, alcancou, guardiao_id, squad_id, informacoes, guardioes(id, nome), squads(id, nome)",
+        "id, nome, presente, meta, faturamento, fat_colaborativo, farol, aposta_verde, aposta_sde, alcancou, guardiao_id, squad_id, informacoes, guardioes(id, nome), squads(id, nome)",
       )
       .order("nome");
     if (error) throw error;
@@ -74,6 +75,8 @@ function Dashboard() {
 
   // Month Reference for Farol (Defaults to Current Month 1-12)
   const [currentMonth, setCurrentMonth] = useState<number>(() => new Date().getMonth() + 1);
+  const [clusterMode, setClusterMode] = useState<ClusterMode>("ANUAL");
+  const [filterCluster, setFilterCluster] = useState<string>("all");
 
   // Profile Modal State
   const [selectedEj, setSelectedEj] = useState<EJRow | null>(null);
@@ -101,11 +104,24 @@ function Dashboard() {
     return ejs.map((e) => {
       const computedFarol = computeFarol(e.meta, e.faturamento, currentMonth);
       const parsed = parseEjMetrics(e.informacoes ?? null, e.ecm, e.csat);
+      const inputs = {
+        faturamento: Number(e.faturamento) || 0,
+        fatColaborativo: Number(e.fat_colaborativo) || 0,
+        ecm: parsed.ecm,
+        csat: parsed.csat,
+        currentMonth,
+      };
+      const idxAnual = computeIndex("ANUAL", inputs);
+      const idxEnej = computeIndex("ENEJ", inputs);
       return {
         ...e,
         farolCalculado: computedFarol,
         ecm: parsed.ecm,
         csat: parsed.csat,
+        indexAnual: idxAnual,
+        indexEnej: idxEnej,
+        clusterAnual: clusterFromIndex(idxAnual),
+        clusterEnej: clusterFromIndex(idxEnej),
       };
     });
   }, [ejs, currentMonth]);
@@ -132,7 +148,8 @@ function Dashboard() {
       filterAposta !== "all" ||
       filterAlcancou ||
       filterEcmMin !== "" ||
-      filterCsatMin !== ""
+      filterCsatMin !== "" ||
+      filterCluster !== "all"
     );
   }, [
     filterNome,
@@ -146,6 +163,7 @@ function Dashboard() {
     filterAlcancou,
     filterEcmMin,
     filterCsatMin,
+    filterCluster,
   ]);
 
   const clearFilters = () => {
@@ -160,6 +178,7 @@ function Dashboard() {
     setFilterAlcancou(false);
     setFilterEcmMin("");
     setFilterCsatMin("");
+    setFilterCluster("all");
   };
 
   const filtered = useMemo(() => {
@@ -201,6 +220,11 @@ function Dashboard() {
         if (!isNaN(minCsat) && (e.csat === null || e.csat === undefined || e.csat < minCsat)) return false;
       }
 
+      if (filterCluster !== "all") {
+        const activeCluster = clusterMode === "ENEJ" ? e.clusterEnej : e.clusterAnual;
+        if (String(activeCluster) !== filterCluster) return false;
+      }
+
       return true;
     });
   }, [
@@ -216,6 +240,8 @@ function Dashboard() {
     filterAlcancou,
     filterEcmMin,
     filterCsatMin,
+    filterCluster,
+    clusterMode,
   ]);
 
   const sorted = useMemo(() => {
@@ -263,6 +289,14 @@ function Dashboard() {
           valA = a.csat ?? -1;
           valB = b.csat ?? -1;
           break;
+        case "cluster":
+          valA = clusterMode === "ENEJ" ? a.clusterEnej : a.clusterAnual;
+          valB = clusterMode === "ENEJ" ? b.clusterEnej : b.clusterAnual;
+          break;
+        case "indice":
+          valA = clusterMode === "ENEJ" ? a.indexEnej : a.indexAnual;
+          valB = clusterMode === "ENEJ" ? b.indexEnej : b.indexAnual;
+          break;
         default:
           return 0;
       }
@@ -271,7 +305,7 @@ function Dashboard() {
       if (valA > valB) return sortDir === "asc" ? 1 : -1;
       return 0;
     });
-  }, [filtered, sortCol, sortDir]);
+  }, [filtered, sortCol, sortDir, clusterMode]);
 
   const handleSort = (colKey: string) => {
     if (sortCol === colKey) {
@@ -311,6 +345,11 @@ function Dashboard() {
     const csatList = filtered.map((e) => e.csat).filter((v): v is number => v !== null && v !== undefined);
     const avgCsat = csatList.length > 0 ? csatList.reduce((a, b) => a + b, 0) / csatList.length : null;
 
+    const byCluster = [1, 2, 3, 4, 5].map((c) => ({
+      cluster: c,
+      count: filtered.filter((e) => (clusterMode === "ENEJ" ? e.clusterEnej : e.clusterAnual) === c).length,
+    }));
+
     return {
       totalMeta,
       totalFat,
@@ -320,8 +359,9 @@ function Dashboard() {
       avgCsat,
       countWithEcm: ecmList.length,
       countWithCsat: csatList.length,
+      byCluster,
     };
-  }, [filtered]);
+  }, [filtered, clusterMode]);
 
   const handleOpenProfile = (ej: EJRow) => {
     setSelectedEj(ej);
@@ -366,6 +406,26 @@ function Dashboard() {
                     </option>
                   ))}
                 </select>
+              </div>
+
+              {/* Cluster Mode Selector */}
+              <div className="flex items-center gap-2 bg-secondary/80 border border-border/80 rounded-xl px-3 py-1.5 text-xs">
+                <Layers className="w-4 h-4 text-primary" />
+                <span className="text-muted-foreground font-medium">Cálculo de Cluster:</span>
+                <div className="inline-flex rounded-md border border-border/60 overflow-hidden">
+                  <button
+                    onClick={() => setClusterMode("ANUAL")}
+                    className={`px-2.5 py-0.5 text-[11px] font-bold transition-colors ${clusterMode === "ANUAL" ? "bg-primary text-primary-foreground" : "bg-background text-muted-foreground hover:text-foreground"}`}
+                  >
+                    Ano Todo
+                  </button>
+                  <button
+                    onClick={() => setClusterMode("ENEJ")}
+                    className={`px-2.5 py-0.5 text-[11px] font-bold transition-colors ${clusterMode === "ENEJ" ? "bg-primary text-primary-foreground" : "bg-background text-muted-foreground hover:text-foreground"}`}
+                  >
+                    ENEJ
+                  </button>
+                </div>
               </div>
 
               {/* Total Summary */}
@@ -421,6 +481,36 @@ function Dashboard() {
               </p>
               <p className="text-[9px] text-muted-foreground">Satisfação Cliente</p>
             </div>
+          </div>
+
+          {/* Cluster Distribution Row */}
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider font-bold text-muted-foreground pr-1">
+              <Layers className="w-3.5 h-3.5 text-primary" />
+              Clusters ({clusterMode === "ENEJ" ? "ENEJ" : "Ano Todo"}):
+            </div>
+            {stats.byCluster.map((c) => (
+              <button
+                key={c.cluster}
+                onClick={() => setFilterCluster(filterCluster === String(c.cluster) ? "all" : String(c.cluster))}
+                className={`px-2.5 py-1 rounded-lg text-[11px] font-bold border transition-colors ${
+                  filterCluster === String(c.cluster)
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "bg-card text-foreground border-border/60 hover:border-primary/60"
+                }`}
+                title={`Filtrar Cluster ${c.cluster}`}
+              >
+                C{c.cluster}: <span className="font-black">{c.count}</span>
+              </button>
+            ))}
+            {filterCluster !== "all" && (
+              <button
+                onClick={() => setFilterCluster("all")}
+                className="text-[10px] text-destructive underline hover:opacity-80"
+              >
+                limpar
+              </button>
+            )}
           </div>
         </div>
       </header>
@@ -507,6 +597,13 @@ function Dashboard() {
                     onClick={() => handleSort("csat")}
                   >
                     CSAT {renderSortIcon("csat")}
+                  </th>
+                  <th
+                    className="text-center px-3 py-3 font-semibold cursor-pointer select-none hover:text-foreground transition-colors"
+                    onClick={() => handleSort("cluster")}
+                    title={`Cluster (${clusterMode === "ENEJ" ? "ENEJ" : "Ano Todo"})`}
+                  >
+                    Cluster {renderSortIcon("cluster")}
                   </th>
                   <th className="text-center px-3 py-3 font-semibold">Aposta</th>
                   <th className="text-center px-3 py-3 font-semibold">Perfil</th>
@@ -654,6 +751,22 @@ function Dashboard() {
                     />
                   </th>
 
+                  {/* Cluster filter */}
+                  <th className="px-2 py-2 text-center font-normal normal-case">
+                    <select
+                      value={filterCluster}
+                      onChange={(e) => setFilterCluster(e.target.value)}
+                      className="w-full bg-background text-foreground text-xs rounded border border-border/60 px-2 py-1 outline-none focus:border-primary text-center"
+                    >
+                      <option value="all">Todos</option>
+                      {[1, 2, 3, 4, 5].map((c) => (
+                        <option key={c} value={String(c)}>
+                          C{c}
+                        </option>
+                      ))}
+                    </select>
+                  </th>
+
                   {/* Aposta filter */}
                   <th className="px-2 py-2 text-center font-normal normal-case">
                     <select
@@ -755,6 +868,25 @@ function Dashboard() {
                         ) : (
                           <span className="text-muted-foreground/60 text-xs">—</span>
                         )}
+                      </td>
+
+                      {/* Cluster Column Cell */}
+                      <td className="px-3 py-3 text-center">
+                        {(() => {
+                          const idx = clusterMode === "ENEJ" ? e.indexEnej : e.indexAnual;
+                          const cl = clusterMode === "ENEJ" ? e.clusterEnej : e.clusterAnual;
+                          if (idx === null) return <span className="text-muted-foreground/60 text-xs">—</span>;
+                          return (
+                            <div className="flex flex-col items-center gap-0.5">
+                              <span className="inline-block px-2 py-0.5 rounded text-xs font-black font-mono bg-primary/15 text-primary border border-primary/40">
+                                C{cl}
+                              </span>
+                              <span className="text-[9px] text-muted-foreground font-mono">
+                                {idx >= 1000 ? `${(idx / 1000).toFixed(1)}k` : idx.toFixed(0)}
+                              </span>
+                            </div>
+                          );
+                        })()}
                       </td>
 
                       <td className="px-3 py-3 text-center">
