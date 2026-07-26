@@ -482,6 +482,36 @@ function Dashboard() {
               <p className="text-[9px] text-muted-foreground">Satisfação Cliente</p>
             </div>
           </div>
+
+          {/* Cluster Distribution Row */}
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider font-bold text-muted-foreground pr-1">
+              <Layers className="w-3.5 h-3.5 text-primary" />
+              Clusters ({clusterMode === "ENEJ" ? "ENEJ" : "Ano Todo"}):
+            </div>
+            {stats.byCluster.map((c) => (
+              <button
+                key={c.cluster}
+                onClick={() => setFilterCluster(filterCluster === String(c.cluster) ? "all" : String(c.cluster))}
+                className={`px-2.5 py-1 rounded-lg text-[11px] font-bold border transition-colors ${
+                  filterCluster === String(c.cluster)
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "bg-card text-foreground border-border/60 hover:border-primary/60"
+                }`}
+                title={`Filtrar Cluster ${c.cluster}`}
+              >
+                C{c.cluster}: <span className="font-black">{c.count}</span>
+              </button>
+            ))}
+            {filterCluster !== "all" && (
+              <button
+                onClick={() => setFilterCluster("all")}
+                className="text-[10px] text-destructive underline hover:opacity-80"
+              >
+                limpar
+              </button>
+            )}
+          </div>
         </div>
       </header>
 
