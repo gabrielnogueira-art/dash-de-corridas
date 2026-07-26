@@ -104,11 +104,24 @@ function Dashboard() {
     return ejs.map((e) => {
       const computedFarol = computeFarol(e.meta, e.faturamento, currentMonth);
       const parsed = parseEjMetrics(e.informacoes ?? null, e.ecm, e.csat);
+      const inputs = {
+        faturamento: Number(e.faturamento) || 0,
+        fatColaborativo: Number(e.fat_colaborativo) || 0,
+        ecm: parsed.ecm,
+        csat: parsed.csat,
+        currentMonth,
+      };
+      const idxAnual = computeIndex("ANUAL", inputs);
+      const idxEnej = computeIndex("ENEJ", inputs);
       return {
         ...e,
         farolCalculado: computedFarol,
         ecm: parsed.ecm,
         csat: parsed.csat,
+        indexAnual: idxAnual,
+        indexEnej: idxEnej,
+        clusterAnual: clusterFromIndex(idxAnual),
+        clusterEnej: clusterFromIndex(idxEnej),
       };
     });
   }, [ejs, currentMonth]);
