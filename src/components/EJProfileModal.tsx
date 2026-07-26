@@ -173,6 +173,7 @@ export function EJProfileModal({
       setNome(ej.nome ?? "");
       setMeta(ej.meta ?? 0);
       setFaturamento(ej.faturamento ?? 0);
+      setFatColab(ej.fat_colaborativo ?? 0);
       setSquadId(ej.squad_id ?? ej.squads?.id ?? "");
       setGuardiaoId(ej.guardiao_id ?? ej.guardioes?.id ?? "");
       setAlcancou(Boolean(ej.alcancou));
