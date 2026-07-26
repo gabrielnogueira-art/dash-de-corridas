@@ -38,12 +38,12 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Acompanhamento em tempo real da Corrida ENEJ: 75 Empresas Juniores, faróis de performance, metas e apostas por squad e guardião.",
+          "Acompanhamento em tempo real das EJs das Corrida : EJSs da Rede, faróis de performance, metas e apostas por squad e guardião.",
       },
-      { property: "og:title", content: "Corrida ENEJ — Dashboard" },
+      { property: "og:title", content: "Corrida ENEJ — Dashboard de EJs" },
       {
         property: "og:description",
-        content: "Ranking, farol e metas das Empresas Juniores na corrida para o ENEJ.",
+        content: "Acompanhamento em tempo real das EJs das Corrida : EJSs da Rede, faróis de performance, metas e apostas por squad e guardião.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

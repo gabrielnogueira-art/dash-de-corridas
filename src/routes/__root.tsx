@@ -77,8 +77,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Corrida ENEJ" },
-      { name: "description", content: "Acompanhamento da Corrida ENEJ das Empresas Juniores." },
+      { title: "Corrida ENEJ — Dashboard de EJs" },
+      { name: "description", content: "Acompanhamento em tempo real das EJs das Corrida : EJSs da Rede, faróis de performance, metas e apostas por squad e guardião." },
+      { property: "og:title", content: "Corrida ENEJ — Dashboard de EJs" },
+      { name: "twitter:title", content: "Corrida ENEJ — Dashboard de EJs" },
+      { property: "og:description", content: "Acompanhamento em tempo real das EJs das Corrida : EJSs da Rede, faróis de performance, metas e apostas por squad e guardião." },
+      { name: "twitter:description", content: "Acompanhamento em tempo real das EJs das Corrida : EJSs da Rede, faróis de performance, metas e apostas por squad e guardião." },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/KkIaozzF7mSErSILvbeNKciaD492/social-images/social-1785088759107-RioJunior.webp" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/KkIaozzF7mSErSILvbeNKciaD492/social-images/social-1785088759107-RioJunior.webp" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:type", content: "website" },
     ],
     links: [
       {
