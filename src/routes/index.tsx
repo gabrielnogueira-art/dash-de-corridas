@@ -305,7 +305,7 @@ function Dashboard() {
       if (valA > valB) return sortDir === "asc" ? 1 : -1;
       return 0;
     });
-  }, [filtered, sortCol, sortDir]);
+  }, [filtered, sortCol, sortDir, clusterMode]);
 
   const handleSort = (colKey: string) => {
     if (sortCol === colKey) {
