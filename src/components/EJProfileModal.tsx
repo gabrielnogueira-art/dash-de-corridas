@@ -466,9 +466,93 @@ export function EJProfileModal({
                 <p className="text-[11px] text-muted-foreground mt-1">
                   Diferença p/ Meta Ano: {fmtBRL(Math.max(0, metaNum - fatNum))}
                 </p>
-              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-medium text-foreground mb-1 flex items-center gap-1.5">
+                <HandCoins className="w-3.5 h-3.5 text-primary" />
+                Faturamento Colaborativo (R$)
+              </label>
+              <input
+                type="number"
+                min="0"
+                step="1"
+                value={fatColab}
+                onChange={(e) => setFatColab(e.target.value === "" ? "" : Number(e.target.value))}
+                className="w-full bg-input text-foreground rounded-lg px-3 py-2 text-sm border border-border/60 outline-none focus:border-primary font-mono"
+              />
+              <p className="text-[11px] text-muted-foreground mt-1">
+                {fatNum > 0 && fatColabNum > 0
+                  ? `Fat.Colab / Fat = ${((fatColabNum / fatNum) * 100).toFixed(1)}%  ·  Fat / Fat.Colab = ${(fatNum / fatColabNum).toFixed(2)}`
+                  : "Usado nas fórmulas de cluster (Anual e ENEJ)."}
+              </p>
             </div>
           </div>
+
+          {/* Cluster Preview */}
+          <div className="space-y-3 pt-2 border-t border-border/40">
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <Layers className="w-4 h-4 text-primary" />
+                <h3 className="text-xs uppercase tracking-wider font-semibold text-muted-foreground">
+                  Calculadora de Cluster
+                </h3>
+              </div>
+              <div className="inline-flex rounded-lg border border-border/60 overflow-hidden text-[11px] font-bold">
+                <button
+                  type="button"
+                  onClick={() => setClusterMode("ANUAL")}
+                  className={`px-3 py-1 transition-colors ${clusterMode === "ANUAL" ? "bg-primary text-primary-foreground" : "bg-background text-muted-foreground hover:text-foreground"}`}
+                >
+                  Ano Todo
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setClusterMode("ENEJ")}
+                  className={`px-3 py-1 transition-colors ${clusterMode === "ENEJ" ? "bg-primary text-primary-foreground" : "bg-background text-muted-foreground hover:text-foreground"}`}
+                >
+                  ENEJ
+                </button>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className={`p-3 rounded-xl border ${clusterMode === "ANUAL" ? "border-primary/60 bg-primary/5" : "border-border/60 bg-muted/20"}`}>
+                <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold">Anual (Virada de Ano)</p>
+                <p className="text-[10px] text-muted-foreground/80 mt-0.5">Fat × CSAT × (1+ECM%) × (1+%FatColab) × 100</p>
+                <div className="flex items-end justify-between mt-2">
+                  <div>
+                    <p className="text-[10px] text-muted-foreground">Índice</p>
+                    <p className="text-sm font-mono font-bold">{indexAnual.toLocaleString("pt-BR", { maximumFractionDigits: 2 })}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-[10px] text-muted-foreground">Cluster</p>
+                    <p className="text-2xl font-black text-primary leading-none">{clusterAnual}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className={`p-3 rounded-xl border ${clusterMode === "ENEJ" ? "border-primary/60 bg-primary/5" : "border-border/60 bg-muted/20"}`}>
+                <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold">ENEJ (Projetado)</p>
+                <p className="text-[10px] text-muted-foreground/80 mt-0.5">(Fat + Fat/mês·(12−mês)) × (1+Fat/FatColab) × (1+ECM) × CSAT × 100</p>
+                <div className="flex items-end justify-between mt-2">
+                  <div>
+                    <p className="text-[10px] text-muted-foreground">Índice</p>
+                    <p className="text-sm font-mono font-bold">{indexEnej.toLocaleString("pt-BR", { maximumFractionDigits: 2 })}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-[10px] text-muted-foreground">Cluster</p>
+                    <p className="text-2xl font-black text-primary leading-none">{clusterEnej}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="text-[10px] text-muted-foreground bg-muted/20 border border-border/40 rounded-lg p-2">
+              Régua: 1 (até 12M) · 2 (12–24M) · 3 (24–61M) · 4 (61–130M) · 5 (130M+). Modo ativo: <span className="font-bold text-foreground">{clusterMode}</span> → Cluster <span className="font-bold text-primary">{activeCluster}</span> (índice {activeIndex.toLocaleString("pt-BR", { maximumFractionDigits: 2 })}).
+            </div>
+          </div>
+
 
           {/* Indicadores Adicionais: ECM & CSAT */}
           <div className="space-y-4 pt-2 border-t border-border/40">
