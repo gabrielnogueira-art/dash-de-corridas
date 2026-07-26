@@ -345,6 +345,11 @@ function Dashboard() {
     const csatList = filtered.map((e) => e.csat).filter((v): v is number => v !== null && v !== undefined);
     const avgCsat = csatList.length > 0 ? csatList.reduce((a, b) => a + b, 0) / csatList.length : null;
 
+    const byCluster = [1, 2, 3, 4, 5].map((c) => ({
+      cluster: c,
+      count: filtered.filter((e) => (clusterMode === "ENEJ" ? e.clusterEnej : e.clusterAnual) === c).length,
+    }));
+
     return {
       totalMeta,
       totalFat,
@@ -354,8 +359,9 @@ function Dashboard() {
       avgCsat,
       countWithEcm: ecmList.length,
       countWithCsat: csatList.length,
+      byCluster,
     };
-  }, [filtered]);
+  }, [filtered, clusterMode]);
 
   const handleOpenProfile = (ej: EJRow) => {
     setSelectedEj(ej);
