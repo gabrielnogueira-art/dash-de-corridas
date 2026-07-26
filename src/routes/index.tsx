@@ -870,6 +870,25 @@ function Dashboard() {
                         )}
                       </td>
 
+                      {/* Cluster Column Cell */}
+                      <td className="px-3 py-3 text-center">
+                        {(() => {
+                          const idx = clusterMode === "ENEJ" ? e.indexEnej : e.indexAnual;
+                          const cl = clusterMode === "ENEJ" ? e.clusterEnej : e.clusterAnual;
+                          if (idx === null) return <span className="text-muted-foreground/60 text-xs">—</span>;
+                          return (
+                            <div className="flex flex-col items-center gap-0.5">
+                              <span className="inline-block px-2 py-0.5 rounded text-xs font-black font-mono bg-primary/15 text-primary border border-primary/40">
+                                C{cl}
+                              </span>
+                              <span className="text-[9px] text-muted-foreground font-mono">
+                                {idx >= 1000 ? `${(idx / 1000).toFixed(1)}k` : idx.toFixed(0)}
+                              </span>
+                            </div>
+                          );
+                        })()}
+                      </td>
+
                       <td className="px-3 py-3 text-center">
                         {e.aposta_verde === "SIM" && (
                           <span className="inline-block rounded px-1.5 py-0.5 text-[10px] font-semibold bg-farol-verde/20 text-farol-verde mr-1">
