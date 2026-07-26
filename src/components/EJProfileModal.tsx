@@ -245,6 +245,7 @@ export function EJProfileModal({
           presente,
           aposta_verde: apostaVerde,
           aposta_sde: apostaSde,
+          fat_colaborativo: fatColabNum,
           informacoes: serializedInformacoes,
           updated_at: new Date().toISOString(),
         })
