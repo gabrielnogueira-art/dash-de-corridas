@@ -148,7 +148,8 @@ function Dashboard() {
       filterAposta !== "all" ||
       filterAlcancou ||
       filterEcmMin !== "" ||
-      filterCsatMin !== ""
+      filterCsatMin !== "" ||
+      filterCluster !== "all"
     );
   }, [
     filterNome,
@@ -162,6 +163,7 @@ function Dashboard() {
     filterAlcancou,
     filterEcmMin,
     filterCsatMin,
+    filterCluster,
   ]);
 
   const clearFilters = () => {
