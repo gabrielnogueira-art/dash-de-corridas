@@ -598,6 +598,13 @@ function Dashboard() {
                   >
                     CSAT {renderSortIcon("csat")}
                   </th>
+                  <th
+                    className="text-center px-3 py-3 font-semibold cursor-pointer select-none hover:text-foreground transition-colors"
+                    onClick={() => handleSort("cluster")}
+                    title={`Cluster (${clusterMode === "ENEJ" ? "ENEJ" : "Ano Todo"})`}
+                  >
+                    Cluster {renderSortIcon("cluster")}
+                  </th>
                   <th className="text-center px-3 py-3 font-semibold">Aposta</th>
                   <th className="text-center px-3 py-3 font-semibold">Perfil</th>
                 </tr>
