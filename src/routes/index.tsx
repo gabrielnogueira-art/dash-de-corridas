@@ -14,7 +14,7 @@ const ejsQuery = queryOptions({
     const { data, error } = await supabase
       .from("ejs")
       .select(
-        "id, nome, presente, meta, faturamento, farol, aposta_verde, aposta_sde, alcancou, guardiao_id, squad_id, informacoes, guardioes(id, nome), squads(id, nome)",
+        "id, nome, presente, meta, faturamento, fat_colaborativo, farol, aposta_verde, aposta_sde, alcancou, guardiao_id, squad_id, informacoes, guardioes(id, nome), squads(id, nome)",
       )
       .order("nome");
     if (error) throw error;
