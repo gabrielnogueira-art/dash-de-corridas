@@ -408,6 +408,26 @@ function Dashboard() {
                 </select>
               </div>
 
+              {/* Cluster Mode Selector */}
+              <div className="flex items-center gap-2 bg-secondary/80 border border-border/80 rounded-xl px-3 py-1.5 text-xs">
+                <Layers className="w-4 h-4 text-primary" />
+                <span className="text-muted-foreground font-medium">Cálculo de Cluster:</span>
+                <div className="inline-flex rounded-md border border-border/60 overflow-hidden">
+                  <button
+                    onClick={() => setClusterMode("ANUAL")}
+                    className={`px-2.5 py-0.5 text-[11px] font-bold transition-colors ${clusterMode === "ANUAL" ? "bg-primary text-primary-foreground" : "bg-background text-muted-foreground hover:text-foreground"}`}
+                  >
+                    Ano Todo
+                  </button>
+                  <button
+                    onClick={() => setClusterMode("ENEJ")}
+                    className={`px-2.5 py-0.5 text-[11px] font-bold transition-colors ${clusterMode === "ENEJ" ? "bg-primary text-primary-foreground" : "bg-background text-muted-foreground hover:text-foreground"}`}
+                  >
+                    ENEJ
+                  </button>
+                </div>
+              </div>
+
               {/* Total Summary */}
               <div className="text-right">
                 <p className="text-[11px] text-muted-foreground uppercase tracking-wider font-semibold">
