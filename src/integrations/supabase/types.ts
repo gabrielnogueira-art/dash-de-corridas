@@ -14,7 +14,158 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      checkpoints: {
+        Row: {
+          created_at: string
+          ej_id: string
+          faturamento: number
+          id: string
+          observacao: string | null
+          semana: string
+        }
+        Insert: {
+          created_at?: string
+          ej_id: string
+          faturamento?: number
+          id?: string
+          observacao?: string | null
+          semana: string
+        }
+        Update: {
+          created_at?: string
+          ej_id?: string
+          faturamento?: number
+          id?: string
+          observacao?: string | null
+          semana?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "checkpoints_ej_id_fkey"
+            columns: ["ej_id"]
+            isOneToOne: false
+            referencedRelation: "ejs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ejs: {
+        Row: {
+          alcancou: boolean
+          aposta_pi: string | null
+          aposta_sde: string | null
+          aposta_verde: string | null
+          atingiu_agosto: string | null
+          created_at: string
+          farol: string | null
+          faturamento: number
+          gap: number
+          guardiao_id: string | null
+          id: string
+          informacoes: string | null
+          meta: number
+          nome: string
+          pi: boolean
+          presente: boolean
+          squad_id: string | null
+          updated_at: string
+          verde_agosto: number
+        }
+        Insert: {
+          alcancou?: boolean
+          aposta_pi?: string | null
+          aposta_sde?: string | null
+          aposta_verde?: string | null
+          atingiu_agosto?: string | null
+          created_at?: string
+          farol?: string | null
+          faturamento?: number
+          gap?: number
+          guardiao_id?: string | null
+          id?: string
+          informacoes?: string | null
+          meta?: number
+          nome: string
+          pi?: boolean
+          presente?: boolean
+          squad_id?: string | null
+          updated_at?: string
+          verde_agosto?: number
+        }
+        Update: {
+          alcancou?: boolean
+          aposta_pi?: string | null
+          aposta_sde?: string | null
+          aposta_verde?: string | null
+          atingiu_agosto?: string | null
+          created_at?: string
+          farol?: string | null
+          faturamento?: number
+          gap?: number
+          guardiao_id?: string | null
+          id?: string
+          informacoes?: string | null
+          meta?: number
+          nome?: string
+          pi?: boolean
+          presente?: boolean
+          squad_id?: string | null
+          updated_at?: string
+          verde_agosto?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ejs_guardiao_id_fkey"
+            columns: ["guardiao_id"]
+            isOneToOne: false
+            referencedRelation: "guardioes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ejs_squad_id_fkey"
+            columns: ["squad_id"]
+            isOneToOne: false
+            referencedRelation: "squads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      guardioes: {
+        Row: {
+          created_at: string
+          id: string
+          nome: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          nome: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          nome?: string
+        }
+        Relationships: []
+      }
+      squads: {
+        Row: {
+          created_at: string
+          id: string
+          nome: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          nome: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          nome?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
